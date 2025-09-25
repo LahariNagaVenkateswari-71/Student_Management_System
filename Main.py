@@ -73,7 +73,43 @@ def Clerk(Students_df):
         else:
             print("Invalid Choice")
 
+def Search_Student(Students_df):
+    print("---------Search Student----------")
+    roll_no = input("Enter Student roll no you want to search: ")
+    result = Students_df[Students_df['Roll_No'].astype(str).values == roll_no]
+    if not result.empty:
+        print("Student Found")
+        print(result.iloc[0])
+    else:
+        print("Student is not found")
 
+def Update_Student(Students_df):
+    print("----------Update_Student----------")
+    roll_no = input("Enter Roll no of the student: ")
+    Index_to_update = Students_df[Students_df['Roll_No'].astype(str).values == roll_no].index
+    if not Index_to_update.empty:
+        print("1)Update Mid1 marks")
+        print("2)Update Mid2 marks")
+        print("3)update Quiz marks")
+        print("4)Exit")
+
+def Teacher(Students_df):
+    print("1)Search Student")
+    print("2)Update Student")
+    print("3)Filter Students")
+    print("4)Exit")
+    while True:
+        try:
+            choice = int(input("Enter your choice: "))
+            if(choice == 1):
+                Search_Student(Students_df)
+                break
+            elif choice ==2:
+                Update_Student(Students_df)
+                break
+        except ValueError:
+            print("Invalid choice")
+            
 
 
 Students_df = data()
@@ -89,7 +125,7 @@ while True:
         Clerk(Students_df)
         break
     elif role == 2:
-        pass
+        Teacher(Students_df)
     elif role == 3:
         pass
     elif role == 4:
