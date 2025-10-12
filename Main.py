@@ -117,7 +117,7 @@ def Update_Student(Students_df):
     if roll_no not in Students_df['Roll_No'].astype(str).values:
         print("Student not found")
         return
-    Index_to_update = Students_df[Students_df['Roll_No'].astype(str) == roll_no].index # we cant use with.values like how we before use it cant keep index but here we want index
+    Index_to_update = Students_df[Students_df['Roll_No'].astype(str) == roll_no].index # we shouldnot use .values like how we before use.that cant keep index but here we want index
     if not Index_to_update.empty:   #.empty to check if the elements is 0 or not
         while True:
             print("1)Update Mid1 marks")
@@ -150,6 +150,41 @@ def Update_Student(Students_df):
         print("Marks Updated!")
         Students_df.to_csv(CSV_File, index = False)
 
+import pandas as pd
+
+def Filter_Students(Students_df):
+    print("------ Sort & Filter ------")
+    while True:
+        print("1. Sort by Final Marks (High to Low)")
+        print("2. Filter by Attendance (Below Threshold)")
+        print("3. Exit")
+        choice = input("Enter your choice: ")
+        if choice == '1':
+            # Sort the DataFrame by 'Final_Marks' in descending order
+            sorted_df = Students_df.sort_values(by='Final_Marks', ascending=False)
+            print("\nSorted by Final Marks (High to Low):")
+            print(sorted_df[['Roll_No', 'Name', 'Final_Marks']].to_string(index = False))
+            break
+        elif choice == '2':
+            try:
+                threshold = int(input("Enter attendance threshold (%): "))
+            
+                # Filter the DataFrame to find students below the threshold
+                filtered_df = Students_df[Students_df['Attendance_%'] < threshold]
+            
+                if not filtered_df.empty:
+                    print(f"\nStudents with Attendance less than {threshold}%:")
+                    print(filtered_df[['Roll_No', 'Name', 'Attendance_%']].to_string(index = False))
+                else:
+                    print(f"No students found with attendance less than {threshold}%.")
+                break
+            except ValueError:
+                print("Invalid input. Please enter a number.")
+        elif choice == '3':
+            Exit()
+            break
+        else:
+            print("Invalid choice.")
 
 
 def Teacher(Students_df):
@@ -167,7 +202,8 @@ def Teacher(Students_df):
                 Update_Student(Students_df)
                 break
             elif choice == 3:
-                pass
+                Filter_Students(Students_df)
+                break
             elif choice == 4:
                 Exit()
             else:
